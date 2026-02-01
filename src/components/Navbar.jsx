@@ -1,10 +1,54 @@
-import { NavLink } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { Github, Sun, Moon } from "lucide-react";
+import "./Navbar.css";
+
 export default function Navbar() {
-    return(
-        <div className="navbar">
-            <NavLink to="/" end className="nav-btn">Home</NavLink>
-             <NavLink to="/sorting" end className="nav-btn"> Sorting</NavLink>
-              <NavLink to="/searching" end className="nav-btn"> Searching</NavLink>
+  const { pathname } = useLocation();
+
+  const isSorting = pathname.startsWith("/sorting");
+  const isSearching = pathname.startsWith("/searching");
+
+  return (
+    <nav className="navbar-wrapper">
+      <div className="navbar">
+        {/* Logo */}
+        <Link to="/" className="logo">
+          DSA<span>Visualizer</span>
+        </Link>
+
+        {/* Center tabs */}
+        <div className="nav-tabs">
+          <Link
+            to="/sorting"
+            className={`nav-link ${isSorting ? "active" : ""}`}
+          >
+            Sorting
+          </Link>
+
+          <Link
+            to="/searching"
+            className={`nav-link ${isSearching ? "active" : ""}`}
+          >
+            Searching
+          </Link>
         </div>
-    );
+
+        {/* Right actions */}
+        <div className="nav-actions">
+          <a
+            href="https://github.com/dsa-visualizer"
+            target="_blank"
+            rel="noreferrer"
+            className="icon-btn"
+          >
+            <Github size={18} />
+          </a>
+
+          <button className="icon-btn">
+            <Moon size={18} />
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
 }
