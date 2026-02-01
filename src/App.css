@@ -1,10 +1,42 @@
-.container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end; 
-  gap: 0px;
-  padding-top: 56px;
+/* ============================================
+   Global Variables - LeetCode Color Scheme
+   ============================================ */
+
+:root {
+  /* Background Colors */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  
+  /* Text Colors */
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  
+  /* Accent Colors */
+  --accent-green: #22c55e;
+  --accent-green-dark: #16a34a;
+  --accent-blue: #3b82f6;
+  --accent-yellow: #fbbf24;
+  --accent-red: #ef4444;
+  --accent-purple: #a855f7;
+  
+  /* Border Colors */
+  --border-subtle: rgba(148, 163, 184, 0.1);
+  --border-medium: rgba(148, 163, 184, 0.2);
+  
+  /* Shadow */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
+  
+  /* Spacing */
+  --navbar-height: 60px;
 }
+
+/* ============================================
+   CSS Reset
+   ============================================ */
 
 * {
   margin: 0;
@@ -16,8 +48,95 @@ html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow-x: hidden;
 }
-body{
+
+body {
   margin: 0;
-  background: #020617;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Main Container
+   ============================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  gap: 0;
+}
+
+/* ============================================
+   Scrollbar Styling (Chrome, Edge, Safari)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ============================================
+   Selection Styling
+   ============================================ */
+
+::selection {
+  background: var(--accent-green);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background: var(--accent-green);
+  color: var(--bg-primary);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Responsive Typography
+   ============================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 56px;
+  }
+  
+  .container {
+    padding-top: var(--navbar-height);
+  }
 }

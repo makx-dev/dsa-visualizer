@@ -5,6 +5,7 @@ import { insertionSortSteps } from '../Sorting Algorithms/insertionSortSteps'
 import { quickSortSteps } from '../Sorting Algorithms/quickSortSteps'
 import { mergeSortSteps } from '../Sorting Algorithms/mergeSortSteps'
 import { ALGO_STATE } from '../constants/ALGO_STATE'
+import '../Sorting.css';
 
 const algorithms = {
   bubble: {
@@ -39,22 +40,30 @@ export default function Sorting() {
   const [currentAlgorithm, setCurrentAlgorithm] = useState("bubble")
   const intervalRef = useRef(null)
   
-  // Initialize array and generate sorting steps
   function generateArray() {
-    if(algoState === ALGO_STATE.RUNNING) {
-      alert("Pause or reset the algorithm first")
-      return;
+      if (algoState === ALGO_STATE.RUNNING) {
+        alert("Pause or reset the algorithm first");
+        return;
+      }
+      const arrayLength = 7;          
+      const minVal = 1;               
+      const maxVal = 10;              
+      const range = [];
+      for (let v = minVal; v < maxVal; v++) range.push(v);
+      for (let i = range.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [range[i], range[j]] = [range[j], range[i]];
+      }
+      const list = range.slice(0, arrayLength);
+      setArray(list);
+      
+      const algorithm = algorithms[currentAlgorithm];
+      const searchSteps = algorithm.steps(list, target);
+      
+      setSteps(searchSteps);
+      setCurrentStep(0);
+      setAlgostate(ALGO_STATE.IDLE);
     }
-    let list = [5, 3, 5, 1, 3, 8, 5]
-    setArray(list);   
-    // Use algorithm map to get the correct function
-    const algorithm = algorithms[currentAlgorithm]
-    const sortSteps = algorithm.steps(list);
-    // Choose algorithm based on currentAlgorithm state
-    setSteps(sortSteps)
-    setCurrentStep(0)
-    setAlgostate(ALGO_STATE.IDLE);
-  }
 
   // Handle speed slider change
   function onSliderChange(e) {
@@ -66,17 +75,11 @@ export default function Sorting() {
     ? steps[currentStep].array 
     : array;
   
-  // Determine bar color based on current step type and index
-  function getBarColor(index) {
-    if (steps.length === 0) return 'blue';
+  // Determine bar class based on current step type and index
+  function getBarClass(index) {
+    if (steps.length === 0) return '';
     const step = steps[currentStep];
-    if (!step) return 'blue';
-    
-    // Dimming effect for range-based operations
-    if (step.type === 'range') {
-      const isOutOfRange = index < step.low || index > step.high;
-      return isOutOfRange ? "rgba(100, 100, 100, 0.3)" : 'blue';
-    } 
+    if (!step) return '';
     
     let active = [];
     if (step.type === 'compare' || step.type === 'swap') {
@@ -93,17 +96,25 @@ export default function Sorting() {
       const isSorted = steps.slice(0, currentStep).some(
         s => s.type === 'markSorted' && s.index === index
       );
-      return isSorted ? 'lightgreen' : 'blue';
+      return isSorted ? 'sorted' : '';
     }
     
     // Priority-based coloring for active bars
-    if (step.type === 'pivot') return 'purple';
-    if (step.type === 'markSorted') return 'green';
-    if (step.type === 'overwrite') return 'orange';
-    if (step.type === 'swap') return 'red';
-    if (step.type === 'compare') return 'yellow';
+    if (step.type === 'pivot') return 'pivot';
+    if (step.type === 'markSorted') return 'sorted';
+    if (step.type === 'overwrite') return 'overwriting';
+    if (step.type === 'swap') return 'swapping';
+    if (step.type === 'compare') return 'comparing';
     
-    return 'blue';
+    return '';
+  }
+
+  // Check if bar should be dimmed (for range operations)
+  function isBarDimmed(index) {
+    if (steps.length === 0) return false;
+    const step = steps[currentStep];
+    if (!step || step.type !== 'range') return false;
+    return index < step.low || index > step.high;
   }
 
   // Auto play effect core logic
@@ -176,119 +187,189 @@ export default function Sorting() {
   }
 
   return (
-    <div className="page">
-      <div className="sorting-visualizer">
-        <h1>DSA Sorting Visualizer</h1>
+    <div className="sorting-visualizer">
+      
+      {/* Control Panel */}
+      <div className="control-panel">
         
         {/* Algorithm Selection */}
-        <div className="algorithm-selection">
-          <button 
-            onClick={() => handleAlgorithmChange("bubble")}
-            className={currentAlgorithm === "bubble" ? "btn active" : "btn"}
-            disabled={currentAlgorithm === "bubble"}
-          >
-            Bubble Sort
-          </button>
-          <button 
-            onClick={() => handleAlgorithmChange("selection")}
-            className={currentAlgorithm === "selection" ? "btn active" : "btn"}
-            disabled={currentAlgorithm === "selection"}
-          >
-            Selection Sort
-          </button>
-          <button 
-            onClick={() => handleAlgorithmChange("insertion")}
-            className={currentAlgorithm === "insertion" ? "btn active" : "btn"}
-            disabled={currentAlgorithm === "insertion"}
-          >
-            Insertion Sort
-          </button>
-          <button 
-            onClick={() => handleAlgorithmChange("quick")}
-            className={currentAlgorithm === "quick" ? "btn active" : "btn"}
-            disabled={currentAlgorithm === "quick"}
-          >
-            Quick Sort
-          </button>
-          <button 
-            onClick={() => handleAlgorithmChange("merge")}
-            className={currentAlgorithm === "merge" ? "btn active" : "btn"}
-            disabled={currentAlgorithm === "merge"}
-          >
-            Merge Sort
-          </button>
-        </div>
-
-        {/* Speed Slider */}
-        <div className="controls">
-          <label>Speed: {speed}ms</label>
-          <input 
-            type="range" 
-            min="100" 
-            max="1000" 
-            step="50"
-            value={speed}
-            onChange={onSliderChange}
-          />
-        </div>
-
-        {/* Container for rendering array bars */}
-        <div className="container">
-          {renderArray.map((value, index) => (  
-            <div 
-              key={index} 
-              className="bar"
-              style={{
-                height: `${value * 20}px`,
-                width: '30px', 
-                backgroundColor: getBarColor(index),
-                borderRadius: 7
-              }}
+        <div className="control-section">
+          <div className="section-title">Select Algorithm</div>
+          <div className="algorithm-buttons">
+            <button 
+              onClick={() => handleAlgorithmChange("bubble")}
+              className={`algo-btn ${currentAlgorithm === "bubble" ? "active" : ""}`}
             >
+              Bubble Sort
+            </button>
+            <button 
+              onClick={() => handleAlgorithmChange("selection")}
+              className={`algo-btn ${currentAlgorithm === "selection" ? "active" : ""}`}
+            >
+              Selection Sort
+            </button>
+            <button 
+              onClick={() => handleAlgorithmChange("insertion")}
+              className={`algo-btn ${currentAlgorithm === "insertion" ? "active" : ""}`}
+            >
+              Insertion Sort
+            </button>
+            <button 
+              onClick={() => handleAlgorithmChange("quick")}
+              className={`algo-btn ${currentAlgorithm === "quick" ? "active" : ""}`}
+            >
+              Quick Sort
+            </button>
+            <button 
+              onClick={() => handleAlgorithmChange("merge")}
+              className={`algo-btn ${currentAlgorithm === "merge" ? "active" : ""}`}
+            >
+              Merge Sort
+            </button>
+          </div>
+        </div>
+
+        {/* Speed Control */}
+        <div className="control-section">
+          <div className="section-title">Animation Speed</div>
+          <div className="speed-control">
+            <div className="speed-label">
+              <span>Speed</span>
+              <span className="speed-value">{speed}ms</span>
             </div>
-          ))}
+            <input 
+              type="range" 
+              className="speed-slider"
+              min="100"
+              max="1000"
+              step="50"
+              value={speed}
+              onChange={onSliderChange}
+            />
+          </div>
         </div>
 
-        {/* Control buttons */}
-        <div className="control-buttons">
-          <button onClick={generateArray} className='btn'>
-            Generate Array
-          </button>
-          <button onClick={handlePlayPause} className='btn'>
-            {getButtonLabel()}
-          </button>
-          <button onClick={handleNextStep} disabled={algoState !== ALGO_STATE.PAUSED} className='btn'>
-            Next Step
-          </button> 
-          <button onClick={handleReset} className='btn'>
-            Reset
-          </button>
-        </div>
-
-        {/* Legend */}
-        <div className="legend">
-          <div className="legend-item">
-            <span className="legend-color" style={{backgroundColor: 'yellow'}}></span>
-            <span>Comparing</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color" style={{backgroundColor: 'red'}}></span>
-            <span>Swapping</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color" style={{backgroundColor: 'orange'}}></span>
-            <span>Overwriting</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color" style={{backgroundColor: 'purple'}}></span>
-            <span>Pivot</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color" style={{backgroundColor: 'green'}}></span>
-            <span>Sorted</span>
+        {/* Action Buttons */}
+        <div className="control-section">
+          <div className="action-buttons">
+            <button 
+              className="action-btn btn-generate"
+              onClick={generateArray}
+            >
+              Generate Array
+            </button>
+            <button 
+              className="action-btn btn-play"
+              onClick={handlePlayPause}
+            >
+              {getButtonLabel()}
+            </button>
+            <button 
+              className="action-btn btn-next"
+              onClick={handleNextStep}
+              disabled={algoState !== ALGO_STATE.PAUSED}
+            >
+              Next Step
+            </button>
+            <button 
+              className="action-btn btn-reset"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Array Visualization */}
+      <div className="array-container">
+        {renderArray.map((value, index) => (  
+          <div 
+            key={index} 
+            className={`array-bar ${getBarClass(index)}`}
+            style={{
+              height: `${value * 30}px`,
+              width: '40px',
+              opacity: isBarDimmed(index) ? 0.3 : 1
+            }}
+          >
+            <span className="bar-value">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Status Bar */}
+      <div className="status-bar">
+        <div className="status-item">
+          <span className="status-label">Algorithm</span>
+          <span className="status-value" style={{ color: '#22c55e' }}>
+            {algorithms[currentAlgorithm].name}
+          </span>
+        </div>
+        <div className="status-item">
+          <span className="status-label">Current Step</span>
+          <span className="status-value">
+            {currentStep} / {steps.length}
+          </span>
+        </div>
+        <div className="status-item">
+          <span className="status-label">Status</span>
+          <span className="status-value" style={{ 
+            color: algoState === ALGO_STATE.COMPLETED ? '#22c55e' : 
+                   algoState === ALGO_STATE.RUNNING ? '#fbbf24' : '#94a3b8'
+          }}>
+            {algoState === ALGO_STATE.IDLE ? 'Ready' :
+             algoState === ALGO_STATE.RUNNING ? 'Running' :
+             algoState === ALGO_STATE.PAUSED ? 'Paused' : 'Completed'}
+          </span>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="status-bar" style={{ marginTop: '16px' }}>
+        <div className="status-item">
+          <span className="status-label">Legend</span>
+        </div>
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ 
+              width: '16px', 
+              height: '16px', 
+              background: 'linear-gradient(180deg, #fbbf24, #f59e0b)',
+              borderRadius: '4px' 
+            }}></div>
+            <span style={{ color: '#94a3b8', fontSize: '13px' }}>Comparing</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ 
+              width: '16px', 
+              height: '16px', 
+              background: 'linear-gradient(180deg, #ef4444, #dc2626)',
+              borderRadius: '4px' 
+            }}></div>
+            <span style={{ color: '#94a3b8', fontSize: '13px' }}>Swapping</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ 
+              width: '16px', 
+              height: '16px', 
+              background: 'linear-gradient(180deg, #a855f7, #9333ea)',
+              borderRadius: '4px' 
+            }}></div>
+            <span style={{ color: '#94a3b8', fontSize: '13px' }}>Pivot</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ 
+              width: '16px', 
+              height: '16px', 
+              background: 'linear-gradient(180deg, #22c55e, #16a34a)',
+              borderRadius: '4px' 
+            }}></div>
+            <span style={{ color: '#94a3b8', fontSize: '13px' }}>Sorted</span>
+          </div>
+        </div>
+      </div>
+      
     </div>
   );
 }

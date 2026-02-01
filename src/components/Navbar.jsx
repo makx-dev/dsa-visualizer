@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Github, Sun, Moon } from "lucide-react";
+import { Github, Moon, Sun } from "lucide-react";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -36,15 +36,16 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="nav-actions">
           <a
-            href="https://github.com/dsa-visualizer"
+            href="https://github.com/MAKX-Dev/dsa-visualizer"
             target="_blank"
             rel="noreferrer"
             className="icon-btn"
+            aria-label="View on GitHub"
           >
             <Github size={18} />
           </a>
 
-          <button className="icon-btn">
+          <button className="icon-btn" aria-label="Toggle theme">
             <Moon size={18} />
           </button>
         </div>
