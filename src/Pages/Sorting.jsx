@@ -31,39 +31,54 @@ const algorithms = {
 }
 
 export default function Sorting() {
-  // State management for the visualizer
-  const [array, setArray] = useState([])  
+  const [array, setArray] = useState(() => generateRandomArray(20));
   const [steps, setSteps] = useState([]) 
   const [currentStep, setCurrentStep] = useState(0) 
   const [speed, setSpeed] = useState(500)
   const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE)
   const [currentAlgorithm, setCurrentAlgorithm] = useState("bubble")
   const intervalRef = useRef(null)
+  const MIN_SIZE = 4;
+  const MAX_SIZE = 20;
+  const [arraySize, setArraySize] = useState(20);
   
+  function generateRandomArray(size) {
+    return Array.from({length: size}, () => Math.floor(Math.random() * 10) + 5);
+  }
+
+  // fires while dragging (UI only)
+  const handleSizeChange = (e) => {
+    setArraySize(Number(e.target.value));
+  };
+
   function generateArray() {
-      if (algoState === ALGO_STATE.RUNNING) {
-        alert("Pause or reset the algorithm first");
-        return;
-      }
-      const arrayLength = 7;          
-      const minVal = 1;               
-      const maxVal = 10;              
-      const range = [];
-      for (let v = minVal; v < maxVal; v++) range.push(v);
-      for (let i = range.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [range[i], range[j]] = [range[j], range[i]];
-      }
-      const list = range.slice(0, arrayLength);
-      setArray(list);
-      
-      const algorithm = algorithms[currentAlgorithm];
-      const searchSteps = algorithm.steps(list, target);
-      
-      setSteps(searchSteps);
-      setCurrentStep(0);
-      setAlgostate(ALGO_STATE.IDLE);
+    if (algoState === ALGO_STATE.RUNNING) {
+      alert("Pause or reset the algorithm first");
+      return;
     }
+    const newArray = generateRandomArray(arraySize);
+    setArray(newArray);
+    const algorithm = algorithms[currentAlgorithm];
+    const sortSteps = algorithm.steps(newArray.slice()); 
+    setSteps(sortSteps);
+    setCurrentStep(0);
+    setAlgostate(ALGO_STATE.IDLE);
+  }
+
+  // fires when user releases slider
+  const handleSizeCommit = (e) => {
+    if (algoState === ALGO_STATE.RUNNING) return;
+
+    const size = Number(e.target.value);
+    setArraySize(size);
+    generateArray();
+  };
+
+  function resetAlgorithm() {
+    setSteps([]);
+    setCurrentStep(0);
+    setAlgostate(ALGO_STATE.IDLE);
+  }
 
   // Handle speed slider change
   function onSliderChange(e) {
@@ -176,6 +191,8 @@ export default function Sorting() {
     }
     setCurrentAlgorithm(algo);
     handleReset();
+    const sortSteps = algorithms[algo].steps(array.slice());
+    setSteps(sortSteps);
   }
 
   // Get button label based on current state
@@ -188,6 +205,21 @@ export default function Sorting() {
 
   return (
     <div className="sorting-visualizer">
+
+      <div className="slider-container">
+  <label>Array Size: {arraySize}</label>
+
+  <input
+    type="range"
+    min={MIN_SIZE}
+    max={MAX_SIZE}
+    value={arraySize}
+    disabled={algoState === ALGO_STATE.RUNNING}
+    onChange={handleSizeChange}
+    onMouseUp={handleSizeCommit}
+    onTouchEnd={handleSizeCommit}
+  />
+</div>
       
       {/* Control Panel */}
       <div className="control-panel">
