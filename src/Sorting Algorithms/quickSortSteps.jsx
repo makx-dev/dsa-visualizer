@@ -11,7 +11,7 @@ export function quickSortSteps(inputArray) {
             type: "range",
             low,
             high,
-            arr: [...arr]
+            array: [...arr]
         });
         if (low < high) {
             const pivotIndex = partition(arr, low, high, steps);    
@@ -77,5 +77,4 @@ function partition(arr, low, high, steps) {
         array: [...arr]
     });   
     return i + 1; 
-    return steps;
 }

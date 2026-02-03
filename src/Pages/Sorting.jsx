@@ -31,25 +31,20 @@ const algorithms = {
 }
 
 export default function Sorting() {
+  const [arraySize, setArraySize] = useState(20);
   const [array, setArray] = useState(() => generateRandomArray(20));
-  const [steps, setSteps] = useState([]) 
-  const [currentStep, setCurrentStep] = useState(0) 
-  const [speed, setSpeed] = useState(500)
-  const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE)
-  const [currentAlgorithm, setCurrentAlgorithm] = useState("bubble")
-  const intervalRef = useRef(null)
+  const [steps, setSteps] = useState(() => bubbleSortSteps(generateRandomArray(20))); // ✅ Generate initial steps
+  const [currentStep, setCurrentStep] = useState(0);
+  const [speed, setSpeed] = useState(500);
+  const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE);
+  const [currentAlgorithm, setCurrentAlgorithm] = useState("bubble");
+  const intervalRef = useRef(null);
   const MIN_SIZE = 4;
   const MAX_SIZE = 20;
-  const [arraySize, setArraySize] = useState(20);
   
   function generateRandomArray(size) {
     return Array.from({length: size}, () => Math.floor(Math.random() * 10) + 5);
   }
-
-  // fires while dragging (UI only)
-  const handleSizeChange = (e) => {
-    setArraySize(Number(e.target.value));
-  };
 
   function generateArray() {
     if (algoState === ALGO_STATE.RUNNING) {
@@ -65,34 +60,25 @@ export default function Sorting() {
     setAlgostate(ALGO_STATE.IDLE);
   }
 
-  // fires when user releases slider
-  const handleSizeCommit = (e) => {
-    if (algoState === ALGO_STATE.RUNNING) return;
+  const handleSizeChange = (e) => {
+    setArraySize(Number(e.target.value));
+  };
 
-    const size = Number(e.target.value);
-    setArraySize(size);
+  const handleSizeCommit = () => {
+    if (algoState === ALGO_STATE.RUNNING) return;
     generateArray();
   };
 
-  function resetAlgorithm() {
-    setSteps([]);
-    setCurrentStep(0);
-    setAlgostate(ALGO_STATE.IDLE);
-  }
-
-  // Handle speed slider change
   function onSliderChange(e) {
-    setSpeed(Number(e.target.value))
+    setSpeed(Number(e.target.value));
   }
 
-  // Determine which array to render
   const renderArray = steps.length > 0 && currentStep < steps.length 
     ? steps[currentStep].array 
     : array;
   
-  // Determine bar class based on current step type and index
   function getBarClass(index) {
-    if (steps.length === 0) return '';
+    if (steps.length === 0 || currentStep >= steps.length) return ''; // ✅ Added boundary check
     const step = steps[currentStep];
     if (!step) return '';
     
@@ -105,16 +91,13 @@ export default function Sorting() {
       active = [step.index];
     }
     
-    // Bars not involved in current operation
     if (!active.includes(index)) {
-      // Check if this bar is already sorted (from previous steps)
       const isSorted = steps.slice(0, currentStep).some(
         s => s.type === 'markSorted' && s.index === index
       );
       return isSorted ? 'sorted' : '';
     }
     
-    // Priority-based coloring for active bars
     if (step.type === 'pivot') return 'pivot';
     if (step.type === 'markSorted') return 'sorted';
     if (step.type === 'overwrite') return 'overwriting';
@@ -124,15 +107,13 @@ export default function Sorting() {
     return '';
   }
 
-  // Check if bar should be dimmed (for range operations)
   function isBarDimmed(index) {
-    if (steps.length === 0) return false;
+    if (steps.length === 0 || currentStep >= steps.length) return false; // ✅ Added boundary check
     const step = steps[currentStep];
     if (!step || step.type !== 'range') return false;
     return index < step.low || index > step.high;
   }
 
-  // Auto play effect core logic
   useEffect(() => {
     if (algoState !== ALGO_STATE.RUNNING) {
       if (intervalRef.current) {
@@ -143,7 +124,7 @@ export default function Sorting() {
 
     intervalRef.current = setInterval(() => {
       setCurrentStep((prev) => {
-        if (prev >= steps.length) {
+        if (prev >= steps.length - 1) { // ✅ Fixed: should be steps.length - 1
           clearInterval(intervalRef.current);
           setAlgostate(ALGO_STATE.COMPLETED);
           return prev;
@@ -156,24 +137,29 @@ export default function Sorting() {
   }, [algoState, speed, steps.length]);
 
   function handlePlayPause() {
-    if(algoState === ALGO_STATE.IDLE || algoState === ALGO_STATE.PAUSED) {
+    if (steps.length === 0) { // ✅ Prevent playing with no steps
+      alert("Generate an array first");
+      return;
+    }
+    
+    if (algoState === ALGO_STATE.IDLE || algoState === ALGO_STATE.PAUSED) {
       setAlgostate(ALGO_STATE.RUNNING);
     }
-    else if(algoState === ALGO_STATE.RUNNING) {
+    else if (algoState === ALGO_STATE.RUNNING) {
       setAlgostate(ALGO_STATE.PAUSED);
     }
-    else if(algoState === ALGO_STATE.COMPLETED) {
+    else if (algoState === ALGO_STATE.COMPLETED) {
       setCurrentStep(0);
       setAlgostate(ALGO_STATE.RUNNING);
     }
   }
 
   function handleNextStep() {
-    if(algoState !== ALGO_STATE.PAUSED) {
+    if (algoState !== ALGO_STATE.PAUSED) {
       alert("Pause the algorithm first");
       return;
     }
-    if(currentStep < steps.length) {
+    if (currentStep < steps.length - 1) { // ✅ Fixed boundary
       setCurrentStep((prev) => prev + 1);
     }
   }
@@ -185,7 +171,7 @@ export default function Sorting() {
   }
 
   function handleAlgorithmChange(algo) {
-    if(algoState === ALGO_STATE.RUNNING) {
+    if (algoState === ALGO_STATE.RUNNING) {
       alert("Algorithm is running");
       return;
     }
@@ -195,12 +181,11 @@ export default function Sorting() {
     setSteps(sortSteps);
   }
 
-  // Get button label based on current state
   function getButtonLabel() {
-    if (algoState === ALGO_STATE.RUNNING) return "Pause"
-    if (algoState === ALGO_STATE.PAUSED) return "Resume"
-    if (algoState === ALGO_STATE.COMPLETED) return "Restart"
-    return "Play"
+    if (algoState === ALGO_STATE.RUNNING) return "Pause";
+    if (algoState === ALGO_STATE.PAUSED) return "Resume";
+    if (algoState === ALGO_STATE.COMPLETED) return "Restart";
+    return "Play";
   }
 
   return (
@@ -210,15 +195,15 @@ export default function Sorting() {
   <label>Array Size: {arraySize}</label>
 
   <input
-    type="range"
-    min={MIN_SIZE}
-    max={MAX_SIZE}
-    value={arraySize}
-    disabled={algoState === ALGO_STATE.RUNNING}
-    onChange={handleSizeChange}
-    onMouseUp={handleSizeCommit}
-    onTouchEnd={handleSizeCommit}
-  />
+  type="range"
+  min={MIN_SIZE}
+  max={MAX_SIZE}
+  value={arraySize}
+  disabled={algoState === ALGO_STATE.RUNNING}
+  onChange={handleSizeChange}
+  onMouseUp={handleSizeCommit}
+  onTouchEnd={handleSizeCommit}
+/>
 </div>
       
       {/* Control Panel */}
@@ -320,8 +305,8 @@ export default function Sorting() {
             key={index} 
             className={`array-bar ${getBarClass(index)}`}
             style={{
-              height: `${value * 30}px`,
-              width: '40px',
+              height: `${value * 18}px`,
+              width: '50px',
               opacity: isBarDimmed(index) ? 0.3 : 1
             }}
           >

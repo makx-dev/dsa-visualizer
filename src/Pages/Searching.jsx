@@ -11,42 +11,67 @@ export const algorithms = {
 }
 
 export default function Searching() {
-  const [array, setArray] = useState([])  
-  const [steps, setSteps] = useState([]) 
-  const [currentStep, setCurrentStep] = useState(0) 
-  const [speed, setSpeed] = useState(500)
-  const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE)
-  const [currentAlgorithm, setCurrentAlgorithm] = useState("linear")
-  const [target, setTarget] = useState(6)
-  const intervalRef = useRef(null)
+  const MIN_SIZE = 4;
+  const MAX_SIZE = 20;
+  const [arraySize, setArraySize] = useState(10);
+  const [array, setArray] = useState(() => generateRandomArray(10));
+  const [steps, setSteps] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [speed, setSpeed] = useState(500);
+  const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE);
+  const [currentAlgorithm, setCurrentAlgorithm] = useState("linear");
+  const [target, setTarget] = useState(6);
+  const intervalRef = useRef(null);
   
+  function generateRandomArray(size) {
+    return Array.from({length: size}, () => Math.floor(Math.random() * 10) + 5);
+  }
+
   function generateArray() {
     if (algoState === ALGO_STATE.RUNNING) {
       alert("Pause or reset the algorithm first");
       return;
     }
-    const arrayLength = 7;          
-    const minVal = 1;               
-    const maxVal = 10;              
-    const range = [];
-    for (let v = minVal; v < maxVal; v++) range.push(v);
-    for (let i = range.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [range[i], range[j]] = [range[j], range[i]];
-    }
-    const list = range.slice(0, arrayLength);
-    setArray(list);
-    
-    const algorithm = algorithms[currentAlgorithm];
-    const searchSteps = algorithm.steps(list, target);
-    
-    setSteps(searchSteps);
+    const newArray = generateRandomArray(arraySize);
+    setArray(newArray);
+    setSteps([]);
     setCurrentStep(0);
     setAlgostate(ALGO_STATE.IDLE);
   }
 
+  // Generate search steps when search is initiated
+  function startSearch() {
+    if (algoState === ALGO_STATE.RUNNING) {
+      alert("Search is already running");
+      return;
+    }
+    if (array.length === 0) {
+      alert("Generate an array first");
+      return;
+    }
+    if (!target && target !== 0) {
+      alert("Please enter a target value");
+      return;
+    }
+    
+    const algorithm = algorithms[currentAlgorithm];
+    const searchSteps = algorithm.steps(array.slice(), target);
+    setSteps(searchSteps);
+    setCurrentStep(0);
+    setAlgostate(ALGO_STATE.RUNNING);
+  }
+
+  const handleSizeChange = (e) => {
+    setArraySize(Number(e.target.value));
+  };
+
+  const handleSizeCommit = () => {
+    if (algoState === ALGO_STATE.RUNNING) return;
+    generateArray();
+  };
+
   function onSliderChange(e) {
-    setSpeed(Number(e.target.value))
+    setSpeed(Number(e.target.value));
   }
 
   const renderArray = steps.length > 0 && currentStep < steps.length 
@@ -54,7 +79,7 @@ export default function Searching() {
     : array;
 
   function getBarClass(index) {
-    if (steps.length === 0) return '';
+    if (steps.length === 0 || currentStep >= steps.length) return '';
     const step = steps[currentStep];
     if (!step) return '';
     
@@ -67,9 +92,7 @@ export default function Searching() {
     if (step.type === 'compare' && step.index === index) {
       return 'visiting';
     }
-    if (targetFoundStep && targetFoundStep.index !== index) {
-      return '';
-    }
+    
     if (step.type === 'not_found') {
       return 'eliminated';
     }
@@ -78,13 +101,8 @@ export default function Searching() {
   }
 
   useEffect(() => {
-    if(steps.length === 0) return; 
     if (algoState !== ALGO_STATE.RUNNING) {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      if(currentStep >= steps.length - 1) {
-        setAlgostate(ALGO_STATE.COMPLETED);
         clearInterval(intervalRef.current);
       }
       return;
@@ -102,27 +120,33 @@ export default function Searching() {
     }, speed);
 
     return () => clearInterval(intervalRef.current);
-  }, [algoState, speed, steps.length, currentStep]);
+  }, [algoState, speed, steps.length]);
 
   function handlePlayPause() {
-    if(algoState === ALGO_STATE.IDLE || algoState === ALGO_STATE.PAUSED) {
+    if (steps.length === 0) {
+      // First time searching - generate steps and start
+      startSearch();
+      return;
+    }
+    
+    if (algoState === ALGO_STATE.IDLE || algoState === ALGO_STATE.PAUSED) {
       setAlgostate(ALGO_STATE.RUNNING);
     }
-    else if(algoState === ALGO_STATE.RUNNING) {
+    else if (algoState === ALGO_STATE.RUNNING) {
       setAlgostate(ALGO_STATE.PAUSED);
     }
-    else if(algoState === ALGO_STATE.COMPLETED) {
+    else if (algoState === ALGO_STATE.COMPLETED) {
       setCurrentStep(0);
       setAlgostate(ALGO_STATE.RUNNING);
     }
   }
 
   function handleNextStep() {
-    if(algoState !== ALGO_STATE.PAUSED) {
+    if (algoState !== ALGO_STATE.PAUSED) {
       alert("Pause the algorithm first");
       return;
     }
-    if(currentStep < steps.length - 1) {
+    if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     }
   }
@@ -130,11 +154,12 @@ export default function Searching() {
   function handleReset() {
     clearInterval(intervalRef.current);
     setCurrentStep(0);
+    setSteps([]);
     setAlgostate(ALGO_STATE.IDLE);
   }
 
   function handleAlgorithmChange(algo) {
-    if(algoState === ALGO_STATE.RUNNING) {
+    if (algoState === ALGO_STATE.RUNNING) {
       alert("Algorithm is running");
       return;
     }
@@ -143,16 +168,33 @@ export default function Searching() {
   }
 
   function getButtonLabel() {
-    if (algoState === ALGO_STATE.RUNNING) return "Pause"
-    if (algoState === ALGO_STATE.PAUSED) return "Resume"
-    if (algoState === ALGO_STATE.COMPLETED) return "Restart"
-    return "Search"
+    if (steps.length === 0) return "Search";
+    if (algoState === ALGO_STATE.RUNNING) return "Pause";
+    if (algoState === ALGO_STATE.PAUSED) return "Resume";
+    if (algoState === ALGO_STATE.COMPLETED) return "Restart";
+    return "Search";
   }
 
   return (
     <div className="searching-visualizer">
       
       <div className="control-panel">
+        
+        {/* Array Size Slider */}
+        <div className="control-section">
+          <div className="section-title">Array Size: {arraySize}</div>
+          <input
+            type="range"
+            min={MIN_SIZE}
+            max={MAX_SIZE}
+            value={arraySize}
+            disabled={algoState === ALGO_STATE.RUNNING}
+            onChange={handleSizeChange}
+            onMouseUp={handleSizeCommit}
+            onTouchEnd={handleSizeCommit}
+            className="size-slider"
+          />
+        </div>
         
         <div className="control-section">
           <div className="section-title">Select Algorithm</div>
@@ -189,6 +231,7 @@ export default function Searching() {
               placeholder="Enter target value..."
               value={target}
               onChange={(e) => setTarget(Number(e.target.value))}
+              disabled={algoState === ALGO_STATE.RUNNING}
             />
           </div>
         </div>
@@ -228,6 +271,13 @@ export default function Searching() {
               {getButtonLabel()}
             </button>
             <button 
+              className="action-btn btn-next"
+              onClick={handleNextStep}
+              disabled={algoState !== ALGO_STATE.PAUSED}
+            >
+              Next Step
+            </button>
+            <button 
               className="action-btn btn-reset"
               onClick={handleReset}
             >
@@ -243,7 +293,7 @@ export default function Searching() {
             key={index} 
             className={`array-bar ${getBarClass(index)}`}
             style={{
-              height: `${value * 30}px`,
+              height: `${value * 20}px`,
               width: '50px'
             }}
           >
@@ -263,7 +313,7 @@ export default function Searching() {
         <div className="status-item">
           <span className="status-label">Target</span>
           <span className="status-value">
-            {target || '-'}
+            {target || target === 0 ? target : '-'}
           </span>
         </div>
         <div className="status-item">
