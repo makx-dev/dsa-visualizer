@@ -1,114 +1,16 @@
-🚀 DSA Visualizer
+# React + Vite
 
-An interactive Data Structures & Algorithms Visualizer that helps you understand how algorithms work through smooth, step-by-step animations.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Built with a focus on clarity, simplicity, and learning-first design.
+Currently, two official plugins are available:
 
-🔗 Live Demo: [Add your Vercel link here]
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
----
+## React Compiler
 
-✨ Features
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- 🎯 Step-by-step algorithm visualization
-- ⚡ Adjustable animation speed
-- 🔢 Custom array generation
-- 🎯 Custom target input for searching algorithms
-- 🧠 Beginner-friendly UI for learning DSA visually
-- 📱 Responsive layout (desktop-first)
+## Expanding the ESLint configuration
 
----
-
-📚 Algorithms Implemented
-
-🔵 Sorting Algorithms
-
-- Bubble Sort
-- Selection Sort
-- Insertion Sort
-- Merge Sort
-- Quick Sort
-
-🟢 Searching Algorithms
-
-- Linear Search
-- Binary Search
-
----
-
-🎮 How It Works
-
-1. Choose an algorithm category (Sorting / Searching)
-2. Generate or customize the array
-3. Adjust animation speed if needed
-4. Watch the algorithm execute step-by-step
-
-Each visualization highlights:
-
-- Active elements
-- Comparisons
-- Swaps / placements
-- Search ranges (for binary search)
-
----
-
-🛠 Tech Stack
-
-- React – UI & component logic
-- Tailwind CSS – Styling
-- Vercel – Deployment
-
----
-
-🎯 Purpose of the Project
-
-This project was built to:
-
-- Strengthen core DSA understanding
-- Help beginners visualize algorithms intuitively
-- Serve as an educational open-source contribution
-- Provide a solid base for future algorithm visualizers
-
----
-
-🗺 Roadmap / Future Improvements
-
-- 🌙 Dark mode support
-- 📖 Algorithm info cards (Time & Space Complexity)
-- ➕ More searching algorithms (Jump Search, Interpolation Search)
-- 📱 Mobile optimization
-- 🎨 UI/UX refinements
-
----
-
-🤝 Contributing
-
-Contributions are welcome!
-
-If you'd like to:
-
-- Add new algorithms
-- Improve UI/UX
-- Optimize performance
-- Fix bugs
-
-Feel free to fork the repo and submit a pull request.
-
----
-
-⭐ If You Like This Project
-
-Consider giving it a star — it helps the project grow and supports open-source learning ❤️
-
----
-
-📬 Author
-
-Manthan Khotele
-Passionate about DSA, problem-solving, and building impactful developer tools.
-
----
-
-📜 License
-
-This project is open-source and available under the MIT License.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
