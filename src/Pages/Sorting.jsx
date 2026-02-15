@@ -5,6 +5,7 @@ import { insertionSortSteps } from '../Sorting Algorithms/insertionSortSteps'
 import { quickSortSteps } from '../Sorting Algorithms/quickSortSteps'
 import { mergeSortSteps } from '../Sorting Algorithms/mergeSortSteps'
 import { ALGO_STATE } from '../constants/ALGO_STATE'
+import { algorithmInfo } from '../components/algorithmInfo'
 import '../Sorting.css';
 
 const algorithms = {

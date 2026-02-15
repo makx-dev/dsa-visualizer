@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
+import { useMemo } from 'react'
 import { linearSearchSteps } from '../Searching Algorithms/linearSearchSteps'
 import { ALGO_STATE } from '../constants/ALGO_STATE'
 import { binarySearchSteps } from '../Searching Algorithms/binarySearchSteps'
+import { algorithmInfo } from '../components/algorithmInfo'
 import '../Searching.css'
 
 export const algorithms = {
