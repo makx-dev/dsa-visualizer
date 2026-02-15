@@ -79,7 +79,7 @@ export default function Sorting() {
     : array;
   
   function getBarClass(index) {
-    if (steps.length === 0 || currentStep >= steps.length) return ''; // ✅ Added boundary check
+    if (steps.length === 0 || currentStep >= steps.length) return ''; 
     const step = steps[currentStep];
     if (!step) return '';
     
@@ -109,7 +109,7 @@ export default function Sorting() {
   }
 
   function isBarDimmed(index) {
-    if (steps.length === 0 || currentStep >= steps.length) return false; // ✅ Added boundary check
+    if (steps.length === 0 || currentStep >= steps.length) return false; 
     const step = steps[currentStep];
     if (!step || step.type !== 'range') return false;
     return index < step.low || index > step.high;
@@ -125,7 +125,7 @@ export default function Sorting() {
 
     intervalRef.current = setInterval(() => {
       setCurrentStep((prev) => {
-        if (prev >= steps.length - 1) { // ✅ Fixed: should be steps.length - 1
+        if (prev >= steps.length - 1) { 
           clearInterval(intervalRef.current);
           setAlgostate(ALGO_STATE.COMPLETED);
           return prev;
@@ -138,7 +138,7 @@ export default function Sorting() {
   }, [algoState, speed, steps.length]);
 
   function handlePlayPause() {
-    if (steps.length === 0) { // ✅ Prevent playing with no steps
+    if (steps.length === 0) { 
       alert("Generate an array first");
       return;
     }
@@ -160,7 +160,7 @@ export default function Sorting() {
       alert("Pause the algorithm first");
       return;
     }
-    if (currentStep < steps.length - 1) { // ✅ Fixed boundary
+    if (currentStep < steps.length - 1) { 
       setCurrentStep((prev) => prev + 1);
     }
   }
