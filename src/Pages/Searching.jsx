@@ -20,8 +20,8 @@ export const algorithms = {
 export default function Searching() {
   const MIN_SIZE = 4;
   const MAX_SIZE = 20;
-  const [arraySize, setArraySize] = useState(10);
-  const [array, setArray] = useState(() => generateRandomArray(10));
+  const [arraySize, setArraySize] = useState(7);
+  const [array, setArray] = useState(() => generateRandomArray(7));
   const [steps, setSteps] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [speed, setSpeed] = useState(500);

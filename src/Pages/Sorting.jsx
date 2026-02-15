@@ -32,9 +32,9 @@ const algorithms = {
 }
 
 export default function Sorting() {
-  const [arraySize, setArraySize] = useState(20);
-  const [array, setArray] = useState(() => generateRandomArray(20));
-  const [steps, setSteps] = useState(() => bubbleSortSteps(generateRandomArray(20))); // ✅ Generate initial steps
+  const [arraySize, setArraySize] = useState(7);
+  const [array, setArray] = useState(() => generateRandomArray(7));
+  const [steps, setSteps] = useState(() => bubbleSortSteps(generateRandomArray(7)));
   const [currentStep, setCurrentStep] = useState(0);
   const [speed, setSpeed] = useState(500);
   const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE);
