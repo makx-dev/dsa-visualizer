@@ -6,14 +6,16 @@ Built with a focus on clarity, simplicity, and learning-first design.
 
 📌 Live Demo: https://makx-visualizer.vercel.app/
 
+✔ Fixed SPA routing issue on refresh using Vercel rewrites.
+
 ✨ Features
 
-✅ Step-by-step algorithm visualization
-✅ Adjustable animation speed
-✅ Random array generation
-✅ Adjustable array size
-✅ Custom target input for searching algorithms
-✅ Beginner-friendly UI for learning DSA visually
+✅ Step-by-step algorithm visualization,
+✅ Adjustable animation speed,
+✅ Random array generation,
+✅ Adjustable array size,
+✅ Custom target input for searching algorithms,
+✅ Beginner-friendly UI for learning DSA visually,
 ✅ Responsive layout (desktop-first)
 
 
@@ -21,15 +23,15 @@ Built with a focus on clarity, simplicity, and learning-first design.
 
 ☑️ Sorting Algorithms
 
-Bubble Sort
-Selection Sort
-Insertion Sort
-Merge Sort
+Bubble Sort,
+Selection Sort,
+Insertion Sort,
+Merge Sort,
 Quick Sort
 
 ☑️ Searching Algorithms
 
-Linear Search
+Linear Search,
 Binary Search
 
 
