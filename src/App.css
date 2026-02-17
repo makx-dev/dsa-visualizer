@@ -1,16 +1,13 @@
 
 :root {
-  /* Background Colors */
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --bg-tertiary: #334155;
-  
-  /* Text Colors */
+
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
   
-  /* Accent Colors */
   --accent-green: #22c55e;
   --accent-green-dark: #16a34a;
   --accent-blue: #3b82f6;
@@ -18,16 +15,13 @@
   --accent-red: #ef4444;
   --accent-purple: #a855f7;
   
-  /* Border Colors */
   --border-subtle: rgba(148, 163, 184, 0.1);
   --border-medium: rgba(148, 163, 184, 0.2);
   
-  /* Shadow */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
   
-  /* Spacing */
   --navbar-height: 60px;
 }
 

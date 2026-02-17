@@ -29,26 +29,22 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
-  animation: float 20s infinite ease-in-out;
+  opacity: 0;
+  
 }
-
 .orb-1 {
   width: 500px;
   height: 500px;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   top: -10%;
   left: -10%;
-  animation-delay: 0s;
 }
 
 .orb-2 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
   bottom: -5%;
   right: -5%;
-  animation-delay: 5s;
 }
 
 .orb-3 {
@@ -58,7 +54,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation-delay: 10s;
 }
 
 @keyframes float {
@@ -79,7 +74,7 @@
   z-index: 1;
   max-width: 900px;
   text-align: center;
-  animation: fadeInUp 1s ease-out;
+
 }
 
 @keyframes fadeInUp {
@@ -98,33 +93,29 @@
   align-items: center;
   gap: 8px;
   padding: 8px 20px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
   border-radius: 50px;
-  color: #22c55e;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 32px;
-  animation: fadeInUp 1s ease-out 0.2s both;
+  
 }
 
 .hero-title {
   font-size: 64px;
   font-weight: 800;
   line-height: 1.1;
-  color: var(--text-primary);
+  color: #2062bb;
   margin-bottom: 24px;
   letter-spacing: -2px;
-  animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #22c55e, #3b82f6, #a855f7);
+  background: linear-gradient(135deg, #4562b7, #4562b7, #4562b7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   background-size: 200% 200%;
-  animation: gradientShift 5s ease infinite;
+  
 }
 
 @keyframes gradientShift {
@@ -144,7 +135,7 @@
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  animation: fadeInUp 1s ease-out 0.6s both;
+ 
 }
 
 .hero-buttons {
@@ -152,7 +143,7 @@
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  animation: fadeInUp 1s ease-out 0.8s both;
+  
 }
 
 .btn-primary,
@@ -166,7 +157,6 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -174,12 +164,12 @@
 .btn-primary {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
-  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+  
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(34, 197, 94, 0.5);
+  
 }
 
 .btn-primary:active {
@@ -222,7 +212,6 @@
 .feature-card {
   background: rgba(30, 41, 59, 0.6);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 20px;
   padding: 32px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -237,7 +226,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+  
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -249,7 +238,7 @@
 }
 
 .feature-card:hover::before {
-  opacity: 1;
+  opacity: 0                        ;
 }
 
 .feature-icon {
@@ -292,9 +281,7 @@
   padding: 0;
 }
 
-.feature-link:hover {
-  gap: 12px;
-}
+
 
 .feature-link.disabled {
   color: var(--text-tertiary);
@@ -332,7 +319,7 @@
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 16px;
-  display: flex;
+  
   align-items: center;
   gap: 12px;
 }
@@ -386,7 +373,7 @@
 
 .cta {
   padding: 120px 32px;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+  background: linear-gradient(135deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 10%));
   position: relative;
   overflow: hidden;
 }

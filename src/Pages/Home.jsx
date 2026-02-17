@@ -18,12 +18,11 @@ export default function Home() {
         
         <div className="hero-content">
           <div className="hero-badge">
-            <Zap size={16} />
-            <span>Interactive Algorithm Visualization</span>
+           
           </div>
           
           <h1 className="hero-title">
-            Master Data Structures
+            Visualize Data Structures
             <span className="gradient-text"> & Algorithms</span>
           </h1>
           
@@ -125,7 +124,7 @@ export default function Home() {
               <h3>Searching Algorithms</h3>
               <div className="algorithm-tags">
                 <span className="tag">Linear Search</span>
-                <span className="tag tag-disabled">Binary Search <small>(coming soon)</small></span>
+                <span className="tag">Binary Search </span>
                 <span className="tag tag-disabled">Jump Search <small>(coming soon)</small></span>
               </div>
             </div>
@@ -134,7 +133,7 @@ export default function Home() {
       </section>
       
       {/* CTA Section */}
-      <section className="cta">
+      {/* <section className="cta">
         <div className="cta-content">
           <h2>Ready to Start Learning?</h2>
           <p>Choose an algorithm category and watch them come to life</p>
@@ -153,7 +152,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
       
     </div>
   );
