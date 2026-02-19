@@ -207,10 +207,8 @@ export default function Sorting() {
 />
 </div>
       
-      {/* Control Panel */}
       <div className="control-panel">
         
-        {/* Algorithm Selection */}
         <div className="control-section">
           <div className="section-title">Select Algorithm</div>
           <div className="algorithm-buttons">
@@ -247,7 +245,6 @@ export default function Sorting() {
           </div>
         </div>
 
-        {/* Speed Control */}
         <div className="control-section">
           <div className="section-title">Animation Speed</div>
           <div className="speed-control">
@@ -267,7 +264,6 @@ export default function Sorting() {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="control-section">
           <div className="action-buttons">
             <button 
@@ -299,7 +295,6 @@ export default function Sorting() {
         </div>
       </div>
 
-      {/* Array Visualization */}
       <div className="array-container">
         {renderArray.map((value, index) => (  
           <div 
@@ -316,7 +311,6 @@ export default function Sorting() {
         ))}
       </div>
 
-      {/* Status Bar */}
       <div className="status-bar">
         <div className="status-item">
           <span className="status-label">Algorithm</span>
@@ -327,7 +321,7 @@ export default function Sorting() {
         <div className="status-item">
           <span className="status-label">Current Step</span>
           <span className="status-value">
-            {currentStep} / {steps.length}
+            {currentStep} / {steps.length-1}
           </span>
         </div>
         <div className="status-item">
@@ -343,7 +337,6 @@ export default function Sorting() {
         </div>
       </div>
 
-      {/* Legend */}
       <div className="status-bar" style={{ marginTop: '16px' }}>
         <div className="status-item">
           <span className="status-label">Legend</span>

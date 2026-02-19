@@ -119,7 +119,7 @@ function getBarClass(index) {
         if (prev >= steps.length - 1) {
           clearInterval(intervalRef.current);
           setAlgostate(ALGO_STATE.COMPLETED);
-          return prev;
+          return steps.length - 1;
         }
         return prev + 1;
       });
@@ -156,6 +156,7 @@ function getBarClass(index) {
       setCurrentStep((prev) => prev + 1);
     }
   }
+
 
   function handleReset() {
     clearInterval(intervalRef.current);
@@ -315,7 +316,7 @@ function getBarClass(index) {
         </div>
         <div className="status-item">
           <span className="status-label">Current Step</span>
-          <span className="status-value">{currentStep} / {steps.length}</span>
+          <span className="status-value">{currentStep} / {steps.length > 0 ? steps.length - 1 : 0}</span>
         </div>
         <div className="status-item">
           <span className="status-label">Status</span>

@@ -10,7 +10,7 @@ export function linearSearchSteps(inputArray, target) {
         });
         if (arr[i] === target) {
             steps.push({
-                type: "target",
+                type: "found",
                 index: i,
                 array: [...arr]  
             });

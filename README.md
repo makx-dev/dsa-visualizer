@@ -4,9 +4,16 @@ An interactive Data Structures & Algorithms Visualizer that helps you understand
 
 Built with a focus on clarity, simplicity, and learning-first design.
 
+## Preview
+
+### Sorting Visualizer in action
+
+
+
 📌 Live Demo: https://makx-visualizer.vercel.app/
 
 ✔ Fixed SPA routing issue on refresh using Vercel rewrites.
+
 
 ✨ Features
 
