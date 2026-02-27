@@ -5,7 +5,7 @@ import { insertionSortSteps } from '../Sorting Algorithms/insertionSortSteps'
 import { quickSortSteps } from '../Sorting Algorithms/quickSortSteps'
 import { mergeSortSteps } from '../Sorting Algorithms/mergeSortSteps'
 import { ALGO_STATE } from '../constants/ALGO_STATE'
-import { algorithmInfo } from '../components/algorithmInfo'
+import AlgoDetailsPanel from '../components/AlgoDetailsPanel'
 import '../Sorting.css';
 
 const algorithms = {
@@ -39,6 +39,7 @@ export default function Sorting() {
   const [speed, setSpeed] = useState(500);
   const [algoState, setAlgostate] = useState(ALGO_STATE.IDLE);
   const [currentAlgorithm, setCurrentAlgorithm] = useState("bubble");
+  const [activeTab, setActiveTab] = useState("info");
   const intervalRef = useRef(null);
   const MIN_SIZE = 4;
   const MAX_SIZE = 20;
@@ -380,7 +381,7 @@ export default function Sorting() {
           </div>
         </div>
       </div>
-      
+       <AlgoDetailsPanel algo={currentAlgorithm}/>
     </div>
   );
 }

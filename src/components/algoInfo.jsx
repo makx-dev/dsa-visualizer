@@ -1,4 +1,4 @@
-export const algorithmInfo = {
+export const algoInfo = {
    bubble: {
   name: "Bubble Sort",
   best: "O(n)",

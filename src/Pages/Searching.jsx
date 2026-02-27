@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { linearSearchSteps } from '../Searching Algorithms/linearSearchSteps'
 import { ALGO_STATE } from '../constants/ALGO_STATE'
 import { binarySearchSteps } from '../Searching Algorithms/binarySearchSteps'
-import { algorithmInfo } from '../components/algorithmInfo'
+import AlgoDetailsPanel from '../components/AlgoDetailsPanel'
 import '../Searching.css'
 
 export const algorithms = {
@@ -366,7 +366,7 @@ function getBarClass(index) {
           </div>
         </div>
       </div>
-
+      <AlgoDetailsPanel algo={currentAlgorithm}/>
     </div>
   );
 }
